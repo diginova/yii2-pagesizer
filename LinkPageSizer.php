@@ -1,6 +1,6 @@
 <?php
 
-namespace nkovacs\pagesizer;
+namespace diginova\pagesizer;
 
 use Yii;
 use yii\base\InvalidConfigException;
@@ -29,7 +29,7 @@ class LinkPageSizer extends Widget
     /**
      * @var array available page sizes. Array keys are sizes, values are labels.
      */
-    public $availableSizes = [10 => '10', 20 => '20', 50 => '50'];
+    public $availableSizes = [ 12 => 12, 24 => 24, 48 => 48 ];
     /**
      * @var array HTML attributes for the pager container tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -78,10 +78,12 @@ class LinkPageSizer extends Widget
         $currentPageSize = $this->pagination->getPageSize();
 
         foreach ($this->availableSizes as $size => $label) {
-            $buttons[]=$this->renderPageSizeButton($label, $size, null, $size==$currentPageSize);
+            $buttons[] = $this->renderPageSizeButton($label, $size, null, $size == $currentPageSize);
         }
-
-        return Html::tag('ul', implode("\n", $buttons), $this->options);
+        $this->options['class'] = 'form-select';
+        $this->options['style'] = 'height: max-content; margin-left: 10px;';
+        $this->options['onchange'] = 'window.location.href = this.options[this.selectedIndex].getAttribute("redirect-url");';
+        return Html::tag('select', implode("\n", $buttons), $this->options);
     }
 
     /**
@@ -101,7 +103,12 @@ class LinkPageSizer extends Widget
         }
         $linkOptions = $this->linkOptions;
         $linkOptions['data-page-size'] = $pageSize;
-
-        return Html::tag('li', Html::a($label, PageSize::createSizeUrl($this->pagination, $pageSize), $linkOptions), $options);
+        $options['value'] = $pageSize;
+        // Html::a($label, PageSize::createSizeUrl($this->pagination, $pageSize), $linkOptions)
+        $options['redirect-url'] = PageSize::createSizeUrl($this->pagination, $pageSize);
+        if ($active) {
+            $options['selected'] = 'selected';
+        }
+        return Html::tag('option', $label, $options);
     }
 }
