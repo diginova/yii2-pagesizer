@@ -1,5 +1,5 @@
 {
-    "name": "nkovacs/yii2-pagesizer",
+    "name": "diginova/yii2-pagesizer",
     "description": "Adds a page size selector to grid views and list views.",
     "type": "yii2-extension",
     "keywords": ["yii2", "extension"],
@@ -8,14 +8,23 @@
         {
             "name": "Nikola Kovacs",
             "email": "nikola.kovacs@gmail.com"
-        }
+        },
+        {
+            "name": "Uğur YILDIZ",
+            "email": "ugur.yildiz@diginova.com.tr",
+            "homepage": "https://uguryildiz.net"
+        },
+		{
+			"name": "Mehmet Ali Demir",
+			"email": "mehmet.demir@diginova.com.tr"
+		}
     ],
     "require": {
         "yiisoft/yii2": "*"
     },
     "autoload": {
         "psr-4": {
-            "nkovacs\\pagesizer\\": ""
+            "diginova\\pagesizer\\": ""
         }
     }
 }

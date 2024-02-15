@@ -1,6 +1,6 @@
 <?php
 
-namespace nkovacs\pagesizer;
+namespace diginova\pagesizer;
 
 use Yii;
 use yii\web\Request;
