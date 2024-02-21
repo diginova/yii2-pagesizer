@@ -2,6 +2,8 @@
 
 namespace diginova\pagesizer;
 
+use portalium\base\Module;
+use portalium\theme\Module as ThemeModule;
 use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
@@ -29,7 +31,7 @@ class LinkPageSizer extends Widget
     /**
      * @var array available page sizes. Array keys are sizes, values are labels.
      */
-    public $availableSizes = [ 12 => 12, 24 => 24, 48 => 48 ];
+    public $availableSizes = [10 => 10, 25 => 25, 50 => 50, 100 => 100];
     /**
      * @var array HTML attributes for the pager container tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -81,9 +83,9 @@ class LinkPageSizer extends Widget
             $buttons[] = $this->renderPageSizeButton($label, $size, null, $size == $currentPageSize);
         }
         $this->options['class'] = 'form-select';
-        $this->options['style'] = 'height: max-content; margin-left: 10px;';
+        $this->options['style'] = 'height: max-content; margin-left: 10px; margin-right: 10px; width: 60px;';
         $this->options['onchange'] = 'window.location.href = this.options[this.selectedIndex].getAttribute("redirect-url");';
-        return Html::tag('select', implode("\n", $buttons), $this->options);
+        return '<div class="d-flex" style="align-items: baseline;">' . ThemeModule::t("Rows Per Page") . ': ' . Html::tag('select', implode("\n", $buttons), $this->options) . '</div>';
     }
 
     /**
