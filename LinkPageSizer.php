@@ -31,7 +31,7 @@ class LinkPageSizer extends Widget
     /**
      * @var array available page sizes. Array keys are sizes, values are labels.
      */
-    public $availableSizes = [10 => 10, 25 => 25, 50 => 50, 100 => 100];
+    public $availableSizes = [10 => 10, 20 => 20, 50 => 50, 100 => 100];
     /**
      * @var array HTML attributes for the pager container tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -78,8 +78,14 @@ class LinkPageSizer extends Widget
 
         $buttons = [];
         $currentPageSize = $this->pagination->getPageSize();
+        $sizes = $this->availableSizes;
+        // the list must show the size in use, otherwise the browser shows the first option
+        if ($currentPageSize > 0 && !isset($sizes[$currentPageSize])) {
+            $sizes[$currentPageSize] = $currentPageSize;
+            ksort($sizes);
+        }
 
-        foreach ($this->availableSizes as $size => $label) {
+        foreach ($sizes as $size => $label) {
             $buttons[] = $this->renderPageSizeButton($label, $size, null, $size == $currentPageSize);
         }
         $this->options['class'] = 'form-select';

@@ -35,11 +35,8 @@ class PageSize
         } else {
             unset($params[$pagination->pageParam]);
         }
-        if ($pageSize != $pagination->defaultPageSize) {
-            $params[$pagination->pageSizeParam] = $pageSize;
-        } else {
-            unset($params[$pagination->pageSizeParam]);
-        }
+        // always explicit: without it the list falls back to the remembered size, not defaultPageSize
+        $params[$pagination->pageSizeParam] = $pageSize;
 
         $params[0] = $pagination->route === null ? Yii::$app->controller->getRoute() : $pagination->route;
         $urlManager = $pagination->urlManager === null ? Yii::$app->getUrlManager() : $pagination->urlManager;
