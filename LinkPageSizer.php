@@ -29,9 +29,12 @@ class LinkPageSizer extends Widget
     public $pagination;
 
     /**
-     * @var array available page sizes. Array keys are sizes, values are labels.
+     * @var array|null available page sizes. Array keys are sizes, values are labels.
+     * Defaults to the options of the `theme::page_size` setting, or [[DEFAULT_SIZES]] when it cannot be read.
      */
-    public $availableSizes = [10 => 10, 20 => 20, 50 => 50, 100 => 100];
+    public $availableSizes;
+
+    public const DEFAULT_SIZES = [10 => 10, 20 => 20, 50 => 50, 100 => 100];
     /**
      * @var array HTML attributes for the pager container tag.
      * @see \yii\helpers\Html::renderTagAttributes() for details on how attributes are being rendered.
@@ -55,6 +58,38 @@ class LinkPageSizer extends Widget
         if ($this->pagination === null) {
             throw new InvalidConfigException('The "pagination" property must be set.');
         }
+        if ($this->availableSizes === null) {
+            $this->availableSizes = $this->settingSizes() ?? self::DEFAULT_SIZES;
+        }
+    }
+
+    /**
+     * Page sizes offered by the `theme::page_size` setting, the same list the setting page shows.
+     * @return array|null sizes as keys and labels, or null when the setting is missing or has no valid size
+     */
+    protected function settingSizes()
+    {
+        if (!Yii::$app->has('setting')) {
+            return null;
+        }
+        try {
+            $config = Yii::$app->setting->getConfig('theme::page_size');
+        } catch (\Exception $e) {
+            return null;
+        }
+        if (!is_array($config)) {
+            return null;
+        }
+
+        $sizes = [];
+        foreach (array_keys($config) as $size) {
+            if (ctype_digit((string) $size) && (int) $size > 0) {
+                $sizes[(int) $size] = (int) $size;
+            }
+        }
+        ksort($sizes);
+
+        return $sizes === [] ? null : $sizes;
     }
 
     /**
